@@ -1,6 +1,8 @@
 package com.asac.SpringCoupang.service;
 
 import com.asac.SpringCoupang.Entity.ProductDetail;
+import com.asac.SpringCoupang.Entity.QProductDetail;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,7 @@ import java.util.List;
 @Service
 public class ProductService {
     private final ProductDetailRepository productDetailRepository;
+    private final JPAQueryFactory queryFactory;
 
     public ProductDetail getProductDetail(Long id) {
         return productDetailRepository.findById(id)
@@ -26,7 +29,11 @@ public class ProductService {
     public void deleteProductDetail(Long id) {
         productDetailRepository.deleteById(id);
     }
+
     public List<ProductDetail> findProductDetailByName(String name) {
-        return productDetailRepository.findProductDetailByName(name);
+        QProductDetail qProductDetail = QProductDetail.productDetail;
+        return queryFactory
+                .selectFrom(qProductDetail)
+                .where(qProductDetail.name.eq(name)).fetch();
     }
 }
