@@ -4,6 +4,7 @@ import com.asac.SpringCoupang.Entity.ProductDetail;
 import com.asac.SpringCoupang.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public class ProductController {
     public ResponseEntity<ProductDetail> getProductDetail(@PathVariable Long id) {
         return ResponseEntity.ok(productService.getProductDetail(id));
     }
-
+    @Secured("ROLE_SELLER")
     @PostMapping
     public ResponseEntity<Void> addProductDetail(@RequestBody ProductDetail productDetail) {
         productService.addProductDetail(productDetail);
@@ -34,6 +35,7 @@ public class ProductController {
         return ResponseEntity.ok().build();
     }
 
+    @Secured("ROLE_SELLER")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProductDetail(@PathVariable Long id) {
         productService.deleteProductDetail(id);
